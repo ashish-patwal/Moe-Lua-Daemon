@@ -4,8 +4,8 @@ local naughty = require("naughty")
 local function emit_info (moe_script_output)
   local title = moe_script_output:match('title(.*)artist')
   local artist = moe_script_output:match('artist(.*)end')
-  -- awesome.emit_signal("evil::moe", title, artist)
-  naughty.notify({ title = "Moe | Now Playing", message = title.." by "..artist })
+  awesome.emit_signal("evil::moe", title, artist)
+  -- naughty.notify({ title = "Moe | Now Playing", message = title.." by "..artist })
 end
 
 local moe_script = [[ 
