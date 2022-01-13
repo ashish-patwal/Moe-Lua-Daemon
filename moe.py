@@ -27,11 +27,20 @@ async def _send_pings(ws, interval=45):
 def _save_cover(cover, URL):
     PATH = path + cover
     if not exists(PATH):
-        wget.download(URL, out=PATH, bar=None)
+        try:
+            wget.download(URL, out=PATH, bar=None)
+            return True
+        except error as e:
+            return False
+    else:
+        return True
 
 
 async def main(loop):
     url = 'wss://listen.moe/gateway_v2'
+    cover = 'Not Available'
+    artist = 'Not Available'
+    title = 'Not Available'
     ws = await websockets.connect(url)
 
     while True:
@@ -42,19 +51,20 @@ async def main(loop):
             loop.create_task(_send_pings(ws, heartbeat))
         elif data['op'] == 1:
             if data['d']:
-                cover = 'Not Available'
-                artist = 'Not Available'
-                title = data['d']['song']['title'] if data['d']['song']['title'] else 'Not Available'
+                if data['d']['song']['title']:
+                    title = data['d']['song']['title']
 
                 if data['d']['song']['artists']:
                     artist = data['d']['song']['artists'][0]['nameRomaji'] or data['d']['song']['artists'][0]['name'] or 'NotAvailable'
 
                 if data['d']['song']['albums'] and data['d']['song']['albums'][0]['image']:
                     cover = data['d']['song']['albums'][0]['image']
-                    _save_cover(cover, album_cover_url + cover)
+                    if not _save_cover(cover, album_cover_url + cover):
+                        cover = 'Not Available'
                 elif data['d']['song']['artists'] and data['d']['song']['artists'][0]['image']:
                     cover = data['d']['song']['artists'][0]['image']
-                    _save_cover(cover, artist_cover_url)
+                    if not _save_cover(cover, artist_cover_url):
+                        cover = 'Not Available'
 
                 stdout.write(f'cover{cover}title{title}artist{artist}end\n')
                 stdout.flush()
