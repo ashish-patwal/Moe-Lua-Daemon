@@ -8,7 +8,8 @@ import websockets
 import wget
 
 path = '/home/lucifer/projects/'
-cover_url = 'https://cdn.listen.moe/covers/'
+album_cover_url = 'https://cdn.listen.moe/covers/'
+artist_cover_url = 'https://cdn.listen.moe/artists/'
 
 
 async def send_ws(ws, data):
@@ -23,8 +24,7 @@ async def _send_pings(ws, interval=45):
         await send_ws(ws, msg)
 
 
-def _save_cover(cover):
-    URL = cover_url + cover
+def _save_cover(cover, URL):
     PATH = path + cover
     if not exists(PATH):
         wget.download(URL, out=PATH, bar=None)
@@ -42,21 +42,22 @@ async def main(loop):
             loop.create_task(_send_pings(ws, heartbeat))
         elif data['op'] == 1:
             if data['d']:
+                cover = 'Not Available'
+                artist = 'Not Available'
                 title = data['d']['song']['title'] if data['d']['song']['title'] else 'Not Available'
 
                 if data['d']['song']['artists']:
                     artist = data['d']['song']['artists'][0]['nameRomaji'] or data['d']['song']['artists'][0]['name'] or 'NotAvailable'
-                else:
-                    artist = 'Not Available'
 
                 if data['d']['song']['albums'] and data['d']['song']['albums'][0]['image']:
                     cover = data['d']['song']['albums'][0]['image']
-                    _save_cover(cover)
-                else:
-                    cover = 'NotAvailable'
+                    _save_cover(cover, album_cover_url + cover)
+                elif data['d']['song']['artists'] and data['d']['song']['artists'][0]['image']:
+                    cover = data['d']['song']['artists'][0]['image']
+                    _save_cover(cover, artist_cover_url)
+
                 stdout.write(f'cover{cover}title{title}artist{artist}end\n')
                 stdout.flush()
-# Now we do with data as we wish.
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
