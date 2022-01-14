@@ -2,6 +2,7 @@
 
 from sys import stdout
 from os.path import exists
+from time import sleep
 import json
 import asyncio
 import websockets
@@ -30,7 +31,7 @@ def _save_cover(cover, URL):
         try:
             wget.download(URL, out=PATH, bar=None)
             return True
-        except error as e:
+        except:
             return False
     else:
         return True
@@ -38,10 +39,16 @@ def _save_cover(cover, URL):
 
 async def main(loop):
     url = 'wss://listen.moe/gateway_v2'
-    cover = 'Not Available'
+    count = ""
+    cover = 'blank.png'
     artist = 'Not Available'
     title = 'Not Available'
-    ws = await websockets.connect(url)
+    while True:
+        try:
+            ws = await websockets.connect(url)
+            break
+        except:
+            sleep(30)
 
     while True:
         data = json.loads(await ws.recv())
@@ -51,6 +58,10 @@ async def main(loop):
             loop.create_task(_send_pings(ws, heartbeat))
         elif data['op'] == 1:
             if data['d']:
+
+                if data['d']['listeners']:
+                    count = str(data['d']['listeners'])
+
                 if data['d']['song']['title']:
                     title = data['d']['song']['title']
 
@@ -60,13 +71,14 @@ async def main(loop):
                 if data['d']['song']['albums'] and data['d']['song']['albums'][0]['image']:
                     cover = data['d']['song']['albums'][0]['image']
                     if not _save_cover(cover, album_cover_url + cover):
-                        cover = 'Not Available'
+                        cover = 'blank.png'
                 elif data['d']['song']['artists'] and data['d']['song']['artists'][0]['image']:
                     cover = data['d']['song']['artists'][0]['image']
                     if not _save_cover(cover, artist_cover_url):
-                        cover = 'Not Available'
+                        cover = 'blank.png'
 
-                stdout.write(f'cover{cover}title{title}artist{artist}end\n')
+                stdout.write(
+                    f'count{count}cover{cover}title{title}artist{artist}end\n')
                 stdout.flush()
 
 if __name__ == '__main__':

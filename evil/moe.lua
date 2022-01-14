@@ -3,10 +3,11 @@ local helpers = require("helpers")
 local naughty = require("naughty")
 
 local function emit_info (moe_script_output)
+  local count = moe_script_output:match('count(%d*)cover')
   local cover = moe_script_output:match('cover(.*)title')
   local title = moe_script_output:match('title(.*)artist')
   local artist = moe_script_output:match('artist(.*)end')
-  awesome.emit_signal("evil::moe", cover, title, artist)
+  awesome.emit_signal("evil::moe", count, cover, title, artist)
   -- naughty.notify({ title = "Moe | Now Playing", message = title.." by "..artist })
 end
 
