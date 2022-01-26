@@ -9,10 +9,18 @@
 
 # ToDo
 
+<<<<<<< HEAD
 - [x] Add widget for displaying info
 - [x] Add async fetching of images of artists / album covers to display in widget
 - [x] Ability to stream the music alongside using mpv
 - [x] Ability to Start / Stop
+=======
+- [x] Add widget for displaying info 
+- [x] Add async fetching of images of artists, album covers to display in widget
+- [x] Ability to stream the music alongside using mpv
+- [x] Ability to Start '/' Stop
+>>>>>>> 43c8c9ac7587cad12388c713f2b3210aaf6b919a
+>>>>>>> 06864d4 (readme)
 
 
 ![photo1](https://pbs.twimg.com/media/FJEYrH9aUAQ5k1Y?format=jpg&name=large)
