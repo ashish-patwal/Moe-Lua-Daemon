@@ -1,3 +1,6 @@
+[![MusicBar](https://user-images.githubusercontent.com/63491234/151204641-5366b90d-8c1c-4f0e-8fba-e909d9f11cdb.png)](https://dev.to/ashishpatwal/make-a-music-bar-listenmoe-mpd-spotify-using-awesome-window-manager-and-lua--aol)
+
+
 # Update
 
 - This repository now holds the code for musicbar ( listen.moe, mpd, spotify ).
