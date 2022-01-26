@@ -1,8 +1,9 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local gears = require("gears")
 local naughty = require("naughty")
 local helpers = require("helpers")
+
+local default_image = os.getenv("HOME")..".config/awesome/default.jpg"
 
 local moe_playing_colors = {
     x.color7,
@@ -17,32 +18,44 @@ local moe_cover = wibox.widget.imagebox()
 local moe_title = wibox.widget.textbox()
 local moe_artist = wibox.widget.textbox()
 local moe_listeners_count = wibox.widget.textbox()
+
 local moe_play_icon = wibox.widget.textbox()
 moe_play_icon.markup = helpers.colorize_text("", x.color4)
 moe_play_icon.font = "Material Icons medium 30"
 moe_play_icon.align = "center"
 moe_play_icon.valign = "center"
+
 local moe_listeners_icon = wibox.widget.textbox()
 moe_listeners_icon.markup = helpers.colorize_text("", x.color6)
 moe_listeners_icon.font = "Material Icons medium 27"
 moe_listeners_icon.align = "center"
 moe_listeners_icon.valign = "center"
 
+local function toggle_icon()
+    if moe_play_icon.text == "" then
+      moe_play_icon.markup = helpers.colorize_text("", x.color4)
+    else
+      moe_play_icon.markup = helpers.colorize_text("", x.color4)
+    end
+end
+
 moe_play_icon:buttons(
     gears.table.join(
         awful.button({ }, 1, function ()
+            toggle_icon()
             awful.spawn.with_shell("moe")
         end)
 ))
 
 helpers.add_hover_cursor(moe_play_icon, "hand1")
 
+
 local moe_widget = wibox.widget {
     -- Cover Image
     {
         {
             {
-                image = user.not_available,
+                image = default_image,
                 clip_shape = helpers.rrect(dpi(16)),
                 widget = moe_cover
             },
@@ -113,8 +126,12 @@ local moe_widget = wibox.widget {
     layout = wibox.layout.fixed.vertical
 }
 
-awesome.connect_signal("evil::moe", function(count ,cover, title, artist)
-    moe_cover.image = os.getenv("HOME").."/projects/"..cover
+awesome.connect_signal("daemon::moe", function(count ,cover, title, artist)
+    if tostring(cover) == "!Available" then
+      moe_cover.image = default_image    
+    else
+      moe_cover.image = os.getenv("HOME").."/projects/"..cover
+    end
     moe_title.markup = helpers.colorize_text(title, moe_playing_colors[math.random(6)])
     moe_artist.text = artist
     moe_listeners_count.text = tostring(count)
