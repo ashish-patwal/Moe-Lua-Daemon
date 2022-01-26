@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/63491234/151205464-03a780d8-7ff4-4397-bd36-24d08d715ada.png" width="80%">[<img src="https://user-images.githubusercontent.com/63491234/151204641-5366b90d-8c1c-4f0e-8fba-e909d9f11cdb.png" width="20%">](https://dev.to/ashishpatwal/make-a-music-bar-listenmoe-mpd-spotify-using-awesome-window-manager-and-lua--aol)
+[<img src="https://user-images.githubusercontent.com/63491234/151205464-03a780d8-7ff4-4397-bd36-24d08d715ada.png" width="80%"><img src="https://user-images.githubusercontent.com/63491234/151204641-5366b90d-8c1c-4f0e-8fba-e909d9f11cdb.png" width="20%">](https://dev.to/ashishpatwal/make-a-music-bar-listenmoe-mpd-spotify-using-awesome-window-manager-and-lua--aol)
 
  
 # Update
