@@ -8,6 +8,7 @@
 # Basic Info
 
 -  A lua daemon for fetching information from listen.moe using websocket through python websocket script. 
+-  Also contains code for mpd and spotify music bar .
 -  Used for Awesome Window Manager . 
 
 # ToDo
